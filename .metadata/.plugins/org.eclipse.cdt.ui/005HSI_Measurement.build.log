@@ -1,0 +1,21 @@
+22:36:52 **** Incremental Build of configuration Debug for project 005HSI_Measurement ****
+make -j12 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:26:44: error: 'RCC_REG_OFFSET' undeclared (first use in this function); did you mean 'RCC_CR_REG_OFFSET'?
+   26 | #define RCC_CFGR_REG_ADDR (RCC_BASE_ADDR + RCC_REG_OFFSET)
+      |                                            ^~~~~~~~~~~~~~
+../Src/main.c:33:38: note: in expansion of macro 'RCC_CFGR_REG_ADDR'
+   33 |  uint32_t *p_rccCfgrReg = (uint32_t*)RCC_CFGR_REG_ADDR;
+      |                                      ^~~~~~~~~~~~~~~~~
+../Src/main.c:26:44: note: each undeclared identifier is reported only once for each function it appears in
+   26 | #define RCC_CFGR_REG_ADDR (RCC_BASE_ADDR + RCC_REG_OFFSET)
+      |                                            ^~~~~~~~~~~~~~
+../Src/main.c:33:38: note: in expansion of macro 'RCC_CFGR_REG_ADDR'
+   33 |  uint32_t *p_rccCfgrReg = (uint32_t*)RCC_CFGR_REG_ADDR;
+      |                                      ^~~~~~~~~~~~~~~~~
+make: *** [Src/subdir.mk:25: Src/main.o] Error 1
+"make -j12 all" terminated with exit code 2. Build might be incomplete.
+
+22:36:53 Build Failed. 2 errors, 0 warnings. (took 262ms)
+
