@@ -1,0 +1,17 @@
+/*
+ * 001led_toggle.c
+ *
+ *  Created on: 30 Nov 2022
+ *      Author: kieranmc
+ */
+
+#include "stm32f407xx.h"
+
+int main(void) {
+
+	GPIO_Handle_t GpioLed;
+	GpioLed.pGPIOx = GPIOD;
+	GpioLed.GPIO_PingConfig.GPIO_PinNumber = GPIO
+
+	return 0;
+}
