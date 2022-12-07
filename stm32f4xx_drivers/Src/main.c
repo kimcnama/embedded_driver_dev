@@ -16,11 +16,12 @@
  ******************************************************************************
  */
 
-#include "stm32f407xx.h"
-
-int LedToggle001(void);
-
-int main(void)
-{
-    return LedToggle001();
-}
+//#include <stdint.h>
+//
+//#include "stm32f407xx.h"
+//
+//int main(void)
+//{
+//    /* Loop forever */
+//	for(;;);
+//}

@@ -36,7 +36,7 @@
  * AHB1 Bus peripherals: GPIO base addresses
  */
 
-#define GPIOA_BASEADDR			( APB1PERIPH_BASEADDR + 0x0000 )
+#define GPIOA_BASEADDR			( AHB1PERIPH_BASEADDR )
 #define GPIOB_BASEADDR			( AHB1PERIPH_BASEADDR + 0x0400 )
 #define GPIOC_BASEADDR			( AHB1PERIPH_BASEADDR + 0x0800 )
 #define GPIOD_BASEADDR			( AHB1PERIPH_BASEADDR + 0x0C00 )
@@ -131,6 +131,33 @@ typedef struct {
 } RCC_RegDef_t;
 
 /*
+ * Peripheral register definition structure for EXTI
+ */
+
+typedef struct {
+	__vo uint32_t IMR;			// Address offset: 0x00
+	__vo uint32_t EMR;			// Address offset: 0x04
+	__vo uint32_t RTSR;			// Address offset: 0x08
+	__vo uint32_t FTSR;			// Address offset: 0x0C
+	__vo uint32_t SWIER;		// Address offset: 0x10
+	__vo uint32_t PR;			// Address offset: 0x14
+} EXTI_RegDef_t;
+
+/*
+ * Peripheral register definition structure for SYSCFG
+ */
+
+typedef struct {
+	__vo uint32_t MEMRMP;			// Address offset: 0x00
+	__vo uint32_t PMC;				// Address offset: 0x04
+	__vo uint32_t EXTICR[4];		// Address offset: 0x08
+	uint32_t RESERVED1[2];		// Address offset: 0x0C
+	__vo uint32_t CMPCR;			// Address offset: 0x10
+	uint32_t RESERVED2[2];		// Address offset: 0x0C
+	__vo uint32_t CFGR;				// Address offset: 0x10
+} SYSCFG_RegDef_t;
+
+/*
  * GPIO Peripheral Registers
  */
 
@@ -145,6 +172,10 @@ typedef struct {
 #define GPIOI					((GPIO_RegDef_t*) GPIOI_BASEADDR)
 
 #define RCC						((RCC_RegDef_t*) RCC_BASEADDR)
+
+#define EXTI					((EXTI_RegDef_t*) EXTI_BASEADDR)
+
+#define SYSCFG					((SYSCFG_RegDef_t*) SYSCFG_BASEADDR)
 
 /*
  * Clock enable macros for GPIOx peripherals
@@ -244,6 +275,30 @@ typedef struct {
 #define GPIOG_REG_RESET()		do { (RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR &= ~(1 << 6)); }while(0)
 #define GPIOH_REG_RESET()		do { (RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7)); }while(0)
 #define GPIOI_REG_RESET()		do { (RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8)); }while(0)
+
+/*
+ * Returns port code of given GPIOx base address
+ */
+#define GPIO_BASEADDR_TO_CODE(x)	((x == GPIOA) ? 0 :\
+									(x == GPIOB) ? 1 :\
+									(x == GPIOC) ? 2 :\
+									(x == GPIOD) ? 3 :\
+									(x == GPIOE) ? 4 :\
+									(x == GPIOF) ? 5 :\
+									(x == GPIOG) ? 6 :\
+									(x == GPIOH) ? 7 :\
+									(x == GPIOI) ? 8 : 0 )
+
+/*
+ * IRQ numbers for different lines
+ */
+#define IRQ_NO_EXTI0				6
+#define IRQ_NO_EXTI1				7
+#define IRQ_NO_EXTI2				8
+#define IRQ_NO_EXTI3				9
+#define IRQ_NO_EXTI4				10
+#define IRQ_NO_EXTI9_5				23
+#define IRQ_NO_EXTI5_10				40
 
 /*
  * Generic MACROS

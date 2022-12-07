@@ -91,6 +91,34 @@ void GPIO_Init(GPIO_Handle_t* pGPIOHandle) {
 		temp = (pGPIOHandle->GPIO_PingConfig.GPIO_PinMode << (2 * pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber));
 		pGPIOHandle->pGPIOx->MODER &= ~(0x3 << (2 * pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber)); // clear
 		pGPIOHandle->pGPIOx->MODER |= temp; // set
+	} else {
+		// Configure for external interrupt handling
+		if (pGPIOHandle->GPIO_PingConfig.GPIO_PinMode == GPIO_MODE_IT_FT ) {
+			// 1. configure FTSR
+			EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+			// Clear the corresponding RTSR bit in case it was active
+			EXTI->RTSR &= ~(1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+
+		} else if (pGPIOHandle->GPIO_PingConfig.GPIO_PinMode == GPIO_MODE_IT_RT ) {
+			// 1. configure RTSR
+			EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+			// Clear the corresponding RTSR bit in case it was active
+			EXTI->FTSR &= ~(1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+		} else if (pGPIOHandle->GPIO_PingConfig.GPIO_PinMode == GPIO_MODE_IT_RFT ) {
+			// 1. configure both FTSR and RTSR for both rising and falling edge
+			EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+			EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
+		}
+
+		// 2. configure the GPIO port selection in SYSCFG_EXTICR
+		uint8_t temp1 = pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber / 4;
+		uint8_t temp2 = pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber % 4;
+		uint8_t portcode = GPIO_BASEADDR_TO_CODE(pGPIOHandle->pGPIOx);
+		SYSCFG_PCLK_EN();
+		SYSCFG->EXTICR[temp1] = (portcode << (temp2 * 4));
+
+		// 3. enable the exti interrupt delivery using IMR
+		EXTI->IMR |= (1 << pGPIOHandle->GPIO_PingConfig.GPIO_PinNumber);
 	}
 
 	// 2. configure speed
