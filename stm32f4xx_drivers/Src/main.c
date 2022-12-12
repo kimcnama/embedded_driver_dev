@@ -16,12 +16,17 @@
  ******************************************************************************
  */
 
-//#include <stdint.h>
-//
-//#include "stm32f407xx.h"
-//
-//int main(void)
-//{
-//    /* Loop forever */
-//	for(;;);
-//}
+#include <stdint.h>
+
+#include "stm32f407xx_gpio_driver.h"
+
+int main(void)
+{
+    /* Loop forever */
+	for(;;);
+}
+
+// Overwrites interrupt handler
+void EXTI0_IRQHandler(void) {
+	GPIO_IRQHandling(0);
+}
