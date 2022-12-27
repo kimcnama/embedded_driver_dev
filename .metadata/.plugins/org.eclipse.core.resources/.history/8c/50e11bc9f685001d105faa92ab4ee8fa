@@ -1,0 +1,177 @@
+/*
+ * stm32f407xx_spi_driver.c
+ *
+ *  Created on: 26 Dec 2022
+ *      Author: kieranmc
+ */
+
+#include "stm32f407xx_spi_driver.h"
+
+/**************************************************
+ * @fn			- SPI_PeriClockControl
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_PeriClockControl(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
+	if (EnorDi == ENABLE) {
+		if (pGPIOx == GPIOA) {
+			GPIOA_PCLK_EN();
+		} else if (pGPIOx == GPIOB) {
+			GPIOB_PCLK_EN();
+		} else if (pGPIOx == GPIOC) {
+			GPIOC_PCLK_EN();
+		} else if (pGPIOx == GPIOD) {
+			GPIOD_PCLK_EN();
+		} else if (pGPIOx == GPIOE) {
+			GPIOE_PCLK_EN();
+		} else if (pGPIOx == GPIOF) {
+			GPIOF_PCLK_EN();
+		} else if (pGPIOx == GPIOG) {
+			GPIOG_PCLK_EN();
+		} else if (pGPIOx == GPIOH) {
+			GPIOH_PCLK_EN();
+		} else if (pGPIOx == GPIOI) {
+			GPIOH_PCLK_EN();
+		}
+
+	} else {
+
+		if (pGPIOx == GPIOA) {
+			GPIOA_PCLK_DI();
+		} else if (pGPIOx == GPIOB) {
+			GPIOB_PCLK_DI();
+		} else if (pGPIOx == GPIOC) {
+			GPIOC_PCLK_DI();
+		} else if (pGPIOx == GPIOD) {
+			GPIOD_PCLK_DI();
+		} else if (pGPIOx == GPIOE) {
+			GPIOE_PCLK_DI();
+		} else if (pGPIOx == GPIOF) {
+			GPIOF_PCLK_DI();
+		} else if (pGPIOx == GPIOG) {
+			GPIOG_PCLK_DI();
+		} else if (pGPIOx == GPIOH) {
+			GPIOH_PCLK_DI();
+		} else if (pGPIOx == GPIOI) {
+			GPIOH_PCLK_DI();
+		}
+	}
+}
+
+/**************************************************
+ * @fn			- SPI_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_Init(SPI_Handle_t* pSPIHandle) {
+
+}
+
+/**************************************************
+ * @fn			- SPI_DeInit
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_DeInit(SPI_RegDef_t* pSPIx) {
+
+}
+
+/*
+ * Init / De-Init
+ */
+/**************************************************
+ * @fn			- SPI_SendData
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_SendData(SPI_RegDef_t* pSPIx, uint8_t *pTxBuffer, uint32_t Len) {
+
+}
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_ReceiveData(SPI_RegDef_t* pSPIx, uint8_t *pTxBuffer, uint32_t Len) {
+
+}
+
+
+/**************************************************
+ * @fn			- SPI_IRQInterruptConfig
+ *
+ * @ brief		- Function to configure the interrupt registers for the Arm Cortex processor
+ *
+ * @param[in]	- Interrupt number
+ * @param[in]	- Enable or Disable
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi) {
+
+}
+
+/**************************************************
+ * @fn			- SPI_IRQPriorityConfig
+ *
+ * @ brief		- Set priority level of given interrupt
+ *
+ * @param[in]	- Interrupt number
+ * @param[in]	- Interrupt priority
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority) {
+
+}
+
+/**************************************************
+ * @fn			- SPI_IRQHandling
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQHandling(SPI_Handle_t* pSPIHandle) {
+
+}
+

@@ -1,0 +1,116 @@
+/*
+ * stm32f407xx_spi_driver.c
+ *
+ *  Created on: 26 Dec 2022
+ *      Author: kieranmc
+ */
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_PeriClockControl(SPI_RegDef_t* pSPIx, uint8_t EnorDi);
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_Init(SPI_Handle_t* pSPIHandle);
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_DeInit(SPI_RegDef_t* pSPIx);
+
+/*
+ * Init / De-Init
+ */
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_SendData(SPI_RegDef_t* pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_ReceiveData(SPI_RegDef_t* pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+
+
+/**************************************************
+ * @fn			- GPIO_IRQITConfig
+ *
+ * @ brief		- Function to configure the interrupt registers for the Arm Cortex processor
+ *
+ * @param[in]	- Interrupt number
+ * @param[in]	- Enable or Disable
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
+
+/**************************************************
+ * @fn			- GPIO_IRQPriorityConfig
+ *
+ * @ brief		- Set priority level of given interrupt
+ *
+ * @param[in]	- Interrupt number
+ * @param[in]	- Interrupt priority
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
+
+/**************************************************
+ * @fn			- GPIO_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_IRQHandling(SPI_Handle_t* pSPIHandle);
