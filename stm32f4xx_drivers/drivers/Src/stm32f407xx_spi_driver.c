@@ -58,6 +58,9 @@ void SPI_Init(SPI_Handle_t* pSPIHandle) {
 	// configure SPI_CR1 register
 	uint32_t tempreg = 0;
 
+	// enable peripheral clock
+	SPI_PeriClockControl(pSPIHandle->pSPIx, ENABLE);
+
 	// 1. configure device mode
 	tempreg |= pSPIHandle->SPIConfig.SPI_DeviceMode << SPI_CR1_MSTR;
 
@@ -230,5 +233,45 @@ void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority) {
  */
 void SPI_IRQHandling(SPI_Handle_t* pSPIHandle) {
 
+}
+
+/**************************************************
+ * @fn			- SPI_PeripheralControl
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- register definition
+ * @param[in]	- enable or disable
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_PeripheralControl(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
+	if (EnorDi) {
+		pSPIx->CR1 |= (1 << SPI_CR1_SPE);
+	} else {
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SPE);
+	}
+}
+
+/**************************************************
+ * @fn			- SPI_SSIConfig
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- register definition
+ * @param[in]	- enable or disable
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_SSIConfig(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
+	if (EnorDi) {
+			pSPIx->CR1 |= (1 << SPI_CR1_SSI);
+		} else {
+			pSPIx->CR1 &= ~(1 << SPI_CR1_SSI);
+		}
 }
 

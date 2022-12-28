@@ -1,0 +1,33 @@
+/*
+ * 006spi_testing.c
+ *
+ *  Created on: 27 Dec 2022
+ *      Author: kieranmc
+ */
+
+/* Pin configs:
+ * PB14 -> SPI2_MISO
+ * PB15 -> SPI2_MOSI
+ * PB13 -> SPI2_SCLK
+ * PB12 -> SPI2_NSS
+ * ALT function mode: 5
+ */
+
+#include "stm32f407xx.h"
+
+void SPI_GPIOInits(void) {
+	GPIO_Handle_t SPIPins;
+	SPIPins.pGPIOx = GPIOB;
+	SPIPins.GPIO_PingConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	SPIPins.GPIO_PingConfig.GPIO_PinAltFunMode = 5;
+	SPIPins.GPIO_PingConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	SPIPins.GPIO_PingConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+
+}
+
+int main(void) {
+
+	SPI_GPIOInits();
+
+	return 0;
+}
