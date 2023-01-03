@@ -133,6 +133,7 @@ uint8_t SPI_GetFlagStatus(SPI_RegDef_t* pSPIx, uint32_t FlagName) {
 	if (pSPIx->SR & FlagName) {
 		return FLAG_SET;
 	}
+	return FLAG_RESET;
 }
 
 /*
@@ -269,9 +270,28 @@ void SPI_PeripheralControl(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
  */
 void SPI_SSIConfig(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
 	if (EnorDi) {
-			pSPIx->CR1 |= (1 << SPI_CR1_SSI);
-		} else {
-			pSPIx->CR1 &= ~(1 << SPI_CR1_SSI);
-		}
+		pSPIx->CR1 |= (1 << SPI_CR1_SSI);
+	} else {
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SSI);
+	}
 }
 
+/**************************************************
+ * @fn			- SPI_SSOEConfig
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- register definition
+ * @param[in]	- enable or disable
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void SPI_SSOEConfig(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
+	if (EnorDi) {
+		pSPIx->CR2 |= (1 << SPI_CR2_SSOE);
+	} else {
+		pSPIx->CR2 &= ~(1 << SPI_CR2_SSOE);
+	}
+}
