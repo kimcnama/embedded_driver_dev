@@ -1,0 +1,62 @@
+/*
+ * stm32f407xx_i2c_driver.c
+ *
+ *  Created on: 21 Jan 2023
+ *      Author: kieranmc
+ */
+
+/**************************************************
+ * @fn			- I2C_PeriClockControl
+ *
+ * @ brief		- This function enables or disables peripheral clock for a given I2C port
+ *
+ * @param[in]	- Base address of I2C peripheral
+ * @param[in]	- enable or disable peripheral clock
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_PeriClockControl(SPI_RegDef_t* pSPIx, uint8_t EnorDi) {
+	if (EnorDi == ENABLE) {
+		if (pSPIx == SPI1) {
+			SPI1_PCLK_EN();
+		} else if (pSPIx == SPI2) {
+			SPI2_PCLK_EN();
+		} else if (pSPIx == SPI3) {
+			SPI3_PCLK_EN();
+		} else if (pSPIx == SPI4) {
+			SPI4_PCLK_EN();
+		}
+	} else {
+		if (pSPIx == SPI1) {
+			SPI1_PCLK_DI();
+		} else if (pSPIx == SPI2) {
+			SPI2_PCLK_DI();
+		} else if (pSPIx == SPI3) {
+			SPI3_PCLK_DI();
+		} else if (pSPIx == SPI4) {
+			SPI4_PCLK_DI();
+		}
+	}
+}
+
+/**************************************************
+ * @fn			- I2C_Init
+ *
+ * @ brief		- Configure the gpio register according to the config structure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_Init(I2C_Handle_t* pI2CHandle) {
+	// 1. Configure mode (standard or fast)
+	// 2. Configure speed of serial clock
+	// 3. Configure the device address (applicable when device is slave)
+	// 4. Enable the acking
+	// 5. Configure the rise time for I2C pins
+}
+

@@ -475,22 +475,6 @@ typedef struct {
 #define I2C_SR1_OVR				11
 #define I2C_SR1_TIMEOUT			14
 
-/*
- * Bit position definitions for I2C_SR2
- */
-#define I2C_SR2_MSL				0
-#define I2C_SR2_BUSY			1
-#define I2C_SR2_TRA				2
-#define I2C_SR2_GENCALL			4
-#define I2C_SR2_DUALF			7
-
-/*
- * Bit position definitions for I2C_CRR
- */
-#define I2C_CRR_CRR				0
-#define I2C_CCR_DUTY			1
-#define I2C_CCR_FS				2
-
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"
