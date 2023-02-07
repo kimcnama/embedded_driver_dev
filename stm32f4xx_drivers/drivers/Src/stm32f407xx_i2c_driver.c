@@ -5,6 +5,11 @@
  *      Author: kieranmc
  */
 
+#include "stm32f407xx.h"
+
+uint16_t AHB_PreScalar[8] = {2,4,8,16,128,256,512};
+uint8_t APB1_PreScalar[4] = {2,4,8,16};
+
 /**************************************************
  * @fn			- I2C_PeripheralControl
  *
@@ -39,22 +44,65 @@ void I2C_PeripheralControl(I2C_RegDef_t* pI2Cx, uint8_t EnorDi) {
  */
 void I2C_PeriClockControl(I2C_RegDef_t* pI2Cx, uint8_t EnorDi) {
 	if (EnorDi == ENABLE) {
-		if (pSPIx == I2C1) {
+		if (pI2Cx == I2C1) {
 			I2C1_PCLK_EN();
-		} else if (pSPIx == I2C2) {
+		} else if (pI2Cx == I2C2) {
 			I2C2_PCLK_EN();
-		} else if (pSPIx == I2C3) {
+		} else if (pI2Cx == I2C3) {
 			I2C3_PCLK_EN();
 		}
 	} else {
-		if (pSPIx == I2C1) {
+		if (pI2Cx == I2C1) {
 			I2C1_PCLK_DI();
-		} else if (pSPIx == I2C2) {
+		} else if (pI2Cx == I2C2) {
 			I2C2_PCLK_DI();
-		} else if (pSPIx == I2C3) {
+		} else if (pI2Cx == I2C3) {
 			I2C3_PCLK_DI();
 		}
 	}
+}
+
+uint32_t RCC_GetPLLOutputClk() {
+	// Not implementing this func in this course
+	return 0;
+}
+
+uint32_t RCC_GetPCLK1Value() {
+	uint32_t pc1k1, sysclk;
+	uint8_t clksrc, temp, ahbp, apb1p;
+	clksrc = (RCC->CFGR >> 2) & 0x3;
+
+	if (clksrc == 0) {
+		// system clock us HSI (16 MHz)
+		sysclk = 16000000;
+	} else if (clksrc == 1) {
+		// system clock us HSE (8 MHz)
+		sysclk = 8000000;
+	} else if (clksrc == 2) {
+		// sys clock decided by PLL and must be calculated
+		sysclk = RCC_GetPLLOutputClk();
+	}
+
+	// for AHB
+	temp = (RCC->CFGR >> 4) & 0xF;
+
+	if (temp < 8) {
+		ahbp = 1;
+	} else {
+		ahbp = AHB_PreScalar[temp - 8];
+	}
+
+	// for APB1
+	temp = (RCC->CFGR >> 10) & 0x7;
+	if (temp < 4) {
+		apb1p = 1;
+	} else {
+		apb1p = APB1_PreScalar[temp - 4];
+	}
+
+	pclk1 = (sysclk / ahbp) / apb1p;
+
+	return pclk1;
 }
 
 /**************************************************
@@ -69,10 +117,15 @@ void I2C_PeriClockControl(I2C_RegDef_t* pI2Cx, uint8_t EnorDi) {
  * @Note		- none
  */
 void I2C_Init(I2C_Handle_t* pI2CHandle) {
+	unit32_t tempreg = 0;
+	tempreg |= (pI2CHandle->I2C_Config.I2C_AckControl << 10);
 	// 1. Configure mode (standard or fast)
 	// 2. Configure speed of serial clock
 	// 3. Configure the device address (applicable when device is slave)
 	// 4. Enable the acking
 	// 5. Configure the rise time for I2C pins
 }
+
+
+
 

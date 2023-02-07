@@ -28,7 +28,7 @@ typedef struct {
 typedef struct {
 	I2C_RegDef_t *pI2Cx;
 	I2C_Config_t I2C_Config;
-}SPI_Handle_t;
+}I2C_Handle_t;
 
 /*
  * @I2C_SCLSpeed
