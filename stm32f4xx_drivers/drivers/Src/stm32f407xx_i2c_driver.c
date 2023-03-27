@@ -10,6 +10,8 @@
 uint16_t AHB_PreScalar[8] = {2,4,8,16,128,256,512};
 uint8_t APB1_PreScalar[4] = {2,4,8,16};
 
+static void void I2C_GenerateStartCondition(I2C_RegDef_t* pI2Cx);
+
 /**************************************************
  * @fn			- I2C_PeripheralControl
  *
@@ -68,7 +70,7 @@ uint32_t RCC_GetPLLOutputClk() {
 }
 
 uint32_t RCC_GetPCLK1Value() {
-	uint32_t pc1k1, sysclk;
+	uint32_t pclk1, sysclk;
 	uint8_t clksrc, temp, ahbp, apb1p;
 	clksrc = (RCC->CFGR >> 2) & 0x3;
 
@@ -117,7 +119,7 @@ uint32_t RCC_GetPCLK1Value() {
  * @Note		- none
  */
 void I2C_Init(I2C_Handle_t* pI2CHandle) {
-	unit32_t tempreg = 0;
+	uint32_t tempreg = 0;
 
 	// 2. Configure speed of serial clock
 	// configure the FREQ field of CR2
@@ -148,7 +150,7 @@ void I2C_Init(I2C_Handle_t* pI2CHandle) {
 		tempreg |= (1 << 15);
 		tempreg |= (pI2CHandle->I2C_Config.I2C_FMDutyCycle << 14);
 
-		if (I2CHandle->I2C_Config.I2C_FMDutyCycle == I2C_FM_DUTY_2) {
+		if (pI2CHandle->I2C_Config.I2C_FMDutyCycle == I2C_FM_DUTY_2) {
 			ccr_value = RCC_GetPCLK1Value() / ( 3 * pI2CHandle->I2C_Config.I2C_SCLSpeed );
 		} else {
 			ccr_value = RCC_GetPCLK1Value() / ( 25 * pI2CHandle->I2C_Config.I2C_SCLSpeed );
@@ -162,4 +164,24 @@ void I2C_Init(I2C_Handle_t* pI2CHandle) {
 
 
 
+void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr) {
+	// 1. Generate the START confition
+	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
+	// 2. confirm that start generation is completed by checking the SB flag in the SR1
+	// Note: until SB is cleared SCL will be stretched (pulled to LOW)
+	while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SB_FLAG));
+
+	// 3. Send the address of the slave with r/nw but set to w(0) (total 8 bits)
+}
+
+void I2C_GenerateStartCondition(I2C_RegDef_t* pI2Cx) {
+	pI2Cx->CR1 |= (1 << I2C_CR1_START);
+}
+
+uint8_t I2C_GetFlagStatus(I2C_RegDef_t* pI2Cx, uint32_t FlagName) {
+	if (pI2Cx->SR1 & FlagName) {
+		return FLAG_SET;
+	}
+	return FLAG_RESET;
+}
