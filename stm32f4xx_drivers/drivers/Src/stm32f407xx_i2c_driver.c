@@ -276,7 +276,6 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 		while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_RXNE_FLAG));
 		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 		*pRxBuffer = pI2CHandle->pI2Cx->DR;
-		return;
 	}
 
 	if (Len > 1) {
