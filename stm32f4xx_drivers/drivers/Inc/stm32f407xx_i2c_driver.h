@@ -64,6 +64,9 @@ typedef struct {
 #define I2C_OVR_FLAG			(1 << I2C_SR1_OVR)
 #define I2C_TIMEOUT_FLAG		(1 << I2C_SR1_TIMEOUT)
 
+#define I2C_NO_SR				RESET
+#define I2C_SR					SET
+
 /*
  * Init / De-Init
  */
@@ -73,8 +76,8 @@ void I2C_DeInit(I2C_RegDef_t *pI2Cx);
 /*
  * Data send receive
  */
-void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr);
-void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_t Len, uint8_t SlaveAddr);
+void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr);
+void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr);
 
 uint8_t I2C_GetFlagStatus(I2C_RegDef_t* pI2Cx, uint32_t FlagName);
 

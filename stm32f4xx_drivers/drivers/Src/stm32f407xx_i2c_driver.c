@@ -207,7 +207,7 @@ void I2C_Init(I2C_Handle_t* pI2CHandle) {
 	pI2CHandle->pI2Cx->TRISE = (tempreg & 0x3F);
 }
 
-void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr) {
+void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr) {
 	// 1. Generate the START confition
 	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
@@ -241,7 +241,8 @@ void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t L
 	while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_BTF_FLAG));
 
 	// 8. Generate stop condition
-	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+	if (Sr == I2C_SNO_R)
+		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 }
 
 /**************************************************
@@ -255,7 +256,7 @@ void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t L
  *
  * @Note		- none
  */
-void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_t Len, uint8_t SlaveAddr) {
+void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr) {
 	// 1. Generate start condition
 	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
@@ -274,7 +275,8 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
 		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
 		while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_RXNE_FLAG));
-		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+		if (Sr == I2C_SNO_R)
+			I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 		*pRxBuffer = pI2CHandle->pI2Cx->DR;
 	}
 
@@ -289,7 +291,8 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 				// clear ack bit
 				I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
 				// generate stop condition
-				I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+				if (Sr == I2C_SNO_R)
+					I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 			}
 			// read data into buffer
 			*pRxBuffer = pI2CHandle->pI2Cx->DR;
