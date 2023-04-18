@@ -367,6 +367,8 @@ typedef struct {
 #define IRQ_NO_EXTI4				10
 #define IRQ_NO_EXTI9_5				23
 #define IRQ_NO_EXTI5_10				40
+#define IRQ_NO_I2C_EV				31
+#define IRQ_NO_I2C_ER				32
 
 /*
  * IRQ priority numbers

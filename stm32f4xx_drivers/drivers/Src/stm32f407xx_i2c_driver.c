@@ -241,7 +241,7 @@ void I2C_MasterSendData(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t L
 	while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_BTF_FLAG));
 
 	// 8. Generate stop condition
-	if (Sr == I2C_SNO_R)
+	if (Sr == I2C_NO_SR)
 		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 }
 
@@ -275,7 +275,7 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
 		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
 		while( ! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_RXNE_FLAG));
-		if (Sr == I2C_SNO_R)
+		if (Sr == I2C_NO_SR)
 			I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 		*pRxBuffer = pI2CHandle->pI2Cx->DR;
 	}
@@ -291,7 +291,7 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 				// clear ack bit
 				I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
 				// generate stop condition
-				if (Sr == I2C_SNO_R)
+				if (Sr == I2C_NO_SR)
 					I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 			}
 			// read data into buffer
@@ -304,6 +304,115 @@ void I2C_MasterReceiveData(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_
 	if (pI2CHandle->I2C_Config.I2C_AckControl == I2C_ACK_ENABLE) {
 		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_ENABLE);
 	}
+}
+
+/**************************************************
+ * @fn			- I2C_MasterSendDataIT
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+uint8_t I2C_MasterSendDataIT(I2C_Handle_t* pI2CHandle, uint8_t* pTxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr) {
+	uint8_t busystate = pI2CHandle->TxRxState;
+
+	if ( (busystate != I2C_BUSY_IN_TX) && (busystate != I2C_BUSY_IN_RX) ) {
+		pI2CHandle->pTxBuffer = pTxBuffer;
+		pI2CHandle->TxLen = Len;
+		pI2CHandle->TxRxState = I2C_BUSY_IN_TX;
+		pI2CHandle->DevAddr = SlaveAddr;
+		pI2CHandle->Sr = Sr;
+
+		// 1. Generate start condition
+		I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
+
+		// Enable IT Buffen control bit
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITBUFEN);
+		// Enable ITEVFEN control bit
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITEVTEN);
+		// Enable I2C_CR2_ITERREN control bit
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITERREN);
+	}
+	return busystate;
+}
+
+/**************************************************
+ * @fn			- I2C_MasterReceiveDataIT
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+uint8_t I2C_MasterReceiveDataIT(I2C_Handle_t* pI2CHandle, uint8_t* pRxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr) {
+
+}
+
+/**************************************************
+ * @fn			- I2C_IRQInterruptConfig
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi) {
+
+}
+
+/**************************************************
+ * @fn			- I2C_IRQPriorityConfig
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority) {
+
+}
+
+/**************************************************
+ * @fn			- I2C_EV_IRQHandling
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_EV_IRQHandling(I2C_Handle_t* pI2CHandle) {
+
+}
+
+/**************************************************
+ * @fn			- I2C_EV_IRQHandling
+ *
+ * @ brief		- Configure
+ *
+ * @param[in]	- configuration structure
+ *
+ * @return		- none
+ *
+ * @Note		- none
+ */
+void I2C_ER_IRQHandling(I2C_Handle_t* pI2CHandle) {
+
 }
 
 void I2C_ManageAcking(I2C_RegDef_t* pI2Cx, uint8_t EnorDi) {
