@@ -83,6 +83,15 @@ typedef struct {
 #define I2C_BUSY_IN_TX			2
 
 /*
+ * Possible I2C Application events
+ */
+#define I2C_EV_TX_CMPLT		1
+#define I2C_EV_RX_CMPLT		2
+#define I2C_EV_OVR_ERR		3
+#define I2C_EV_CRC_ERR		4
+#define I2C_EV_STOP			5
+
+/*
  * Init / De-Init
  */
 void I2C_Init(I2C_Handle_t* pI2CHandle);
